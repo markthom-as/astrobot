@@ -80,6 +80,7 @@ Pisces Ascendant: Pisces is the first sign, so it becomes the first house. Aries
 
 These axioms help us determine the order of houses and their corresponding signs based on the Ascendant sign in a chart.
 
+
 Answer:"""
 
 PROMPT = PromptTemplate(
