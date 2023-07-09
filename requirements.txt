@@ -7,3 +7,4 @@ altair
 openai
 tiktoken
 pinecone-client
+unstructured
