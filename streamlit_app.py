@@ -88,41 +88,38 @@ PROMPT = PromptTemplate(
 )
 
 
-@st.cache_resource
-def embedding_db():
-    # we use the openAI embedding model
-    embeddings = OpenAIEmbeddings()
-    pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENV)
-    docs_split = doc_preprocessing()
-    doc_db = Pinecone.from_documents(docs_split, embeddings, index_name="astro")
-    return doc_db
-
-
-llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.5)
-doc_db = embedding_db()
-
-
-def retrieval_answer(query, messages):
-    chain_type_kwargs = {"prompt": PROMPT}
-    # qa_chain = load_qa_chain(ChatOpenAI(temperature=0), chain_type="stuff")
-    qa = RetrievalQA.from_chain_type(
-        llm=llm,
-        chain_type="stuff",
-        # combine_documents_chain=qa_chain,
-        retriever=doc_db.as_retriever(),
-        chain_type_kwargs=chain_type_kwargs,
-        # return_source_documents=True,
-    )
-    query = query
-    messages = str(messages)
-
-    with st.spinner("Thinking..."):
-        result = qa({"query": query, "context": messages})
-    # result["source_documents"]
-    return result["result"]
-
-
 def main():
+    @st.cache_resource
+    def embedding_db():
+        # we use the openAI embedding model
+        embeddings = OpenAIEmbeddings()
+        pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENV)
+        docs_split = doc_preprocessing()
+        doc_db = Pinecone.from_documents(docs_split, embeddings, index_name="astro")
+        return doc_db
+
+    llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.5)
+    doc_db = embedding_db()
+
+    def retrieval_answer(query, messages):
+        chain_type_kwargs = {"prompt": PROMPT}
+        # qa_chain = load_qa_chain(ChatOpenAI(temperature=0), chain_type="stuff")
+        qa = RetrievalQA.from_chain_type(
+            llm=llm,
+            chain_type="stuff",
+            # combine_documents_chain=qa_chain,
+            retriever=doc_db.as_retriever(),
+            chain_type_kwargs=chain_type_kwargs,
+            # return_source_documents=True,
+        )
+        query = query
+        messages = str(messages)
+
+        with st.spinner("Thinking..."):
+            result = qa({"query": query, "context": messages})
+        # result["source_documents"]
+        return result["result"]
+
     # React to user input
     if prompt := st.chat_input("Ask your questions about the celestial art"):
         # Display user message in chat message container
