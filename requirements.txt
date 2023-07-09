@@ -3,7 +3,7 @@ PyPDF2
 python-dotenv
 streamlit
 faiss-cpu
+altair
 openai
 tiktoken
 pinecone-client
-unstructured

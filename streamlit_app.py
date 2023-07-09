@@ -23,7 +23,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 st.title("Ask the Astro Oracle Anything you Please")
-st.subheader("_This WIP chat app quieries a large set of classical astrology texts_")
+st.subheader("_This WIP chat app queries a large set of classical astrology texts_")
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -41,7 +41,7 @@ def doc_preprocessing():
     )
     docs = loader.load()
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000, chunk_overlap=0, separators=[" ", ",", "\n"]
+        chunk_size=1000, chunk_overlap=20, separators=[" ", ",", "\n"]
     )
     docs_split = text_splitter.split_documents(docs)
     return docs_split
