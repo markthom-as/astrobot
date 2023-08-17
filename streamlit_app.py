@@ -70,7 +70,7 @@ def main():
         doc_db = Pinecone.from_documents(docs_split, embeddings, index_name="astro")
         return doc_db
 
-    llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.5)
+    llm = ChatOpenAI(model_name="gpt-4", temperature=0.5)
     doc_db = embedding_db()
 
     def retrieval_answer(query, messages):
